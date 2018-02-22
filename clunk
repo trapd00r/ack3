@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use lib 'lib';
+
+use 5.010001;
+use Getopt::Long 2.38 ();
+use App::Ack::ConfigLoader ();
+
+
+Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+
+
+
+my $opt = {};
+
+my $old_spec = App::Ack::ConfigLoader::get_arg_spec( $opt, {} );
+#{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( $old_spec )}
+
+my $new_spec = {};
+
+my %seen;
+for my $spec ( sort keys %{$old_spec} ) {
+    $new_spec->{$spec} = sub { ++$seen{+shift} };
+}
+
+
+Getopt::Long::GetOptions( %{$new_spec} );
+
+{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( \%seen )}
