@@ -13,14 +13,14 @@ A container for functions for the ack program.
 
 =head1 VERSION
 
-Version 2.999_03
+Version 2.999_04
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '2.999_03';
+    $VERSION = '2.999_04';
     $COPYRIGHT = 'Copyright 2005-2018 Andy Lester.';
 }
 our $STANDALONE = 0;
@@ -290,6 +290,7 @@ File presentation:
   --nogroup                     Same as --noheading --nobreak
   --[no]proximate               Separate match output with blank lines unless
                                 they are on adjacent lines.
+  -P                            Negates --proximate.
   --[no]underline               Print a line of carets under the matched text.
   --[no]color, --[no]colour     Highlight the matching text (default: on unless
                                 output is redirected, or on Windows)
