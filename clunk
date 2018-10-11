@@ -14,19 +14,32 @@ Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
 
 
 
-my $opt = {};
+my $options_used = options_used();
+{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( $options_used )}
 
-my $old_spec = App::Ack::ConfigLoader::get_arg_spec( $opt, {} );
-#{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( $old_spec )}
+say 'After processing, @ARGV is:';
+say for @ARGV;
 
-my $new_spec = {};
+# Processes the command line option and returns a hash of the options that were
+# used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
 
-my %seen;
-for my $spec ( sort keys %{$old_spec} ) {
-    $new_spec->{$spec} = sub { ++$seen{+shift} };
+sub options_used {
+    local @ARGV = @ARGV;
+
+    # We don't care about the hashes passed in to get_arg_spec().
+    my $real_spec = App::Ack::ConfigLoader::get_arg_spec( {}, {} );
+
+    # Go through the specs and change them to just set a value in a hash.
+    # We don't want it to take action, only to note that the argument appeared.
+    my $seen;
+    my $hashifying_spec = {};
+    for my $spec ( sort keys %{$real_spec} ) {
+        $hashifying_spec->{$spec} = sub { ++$seen->{+shift} };
+    }
+
+    # Process the arguments, which has no effect and reads through our local @ARGV copy.
+    Getopt::Long::GetOptions( %{$hashifying_spec} );
+
+    return $seen;
 }
 
-
-Getopt::Long::GetOptions( %{$new_spec} );
-
-{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( \%seen )}
