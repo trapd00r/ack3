@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 250;
+use Test::More tests => 252;
 use lib 't';
 use Util;
 
@@ -11,6 +11,12 @@ prep_environment();
 
 my $file = 't/text/raven.txt';
 my $word = 'nevermore';
+
+
+# Check for abbreviated mutex options.
+# See https://github.com/beyondgrep/ack3/issues/57
+are_mutually_exclusive('--lines', '--passthru', ['--lines=1', '--passthru', $file]);
+are_mutually_exclusive('--lines', '--passthru', ['--lines=1', '--passt', $file]);
 
 # --lines
 are_mutually_exclusive('--lines', '-l', ['--lines=1', '-l', $file]);
