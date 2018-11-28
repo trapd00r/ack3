@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/bin/env perl
 
 use 5.010;
 use strict;
@@ -54,7 +54,6 @@ $Data::Dumper::Quotekeys = 0;
 
 my $out = Dumper( \%mutex );
 $out =~ s/  /    /g;
-
 say $out;
 
 exit 0;
