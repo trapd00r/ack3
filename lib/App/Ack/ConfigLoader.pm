@@ -27,13 +27,15 @@ Logic for loading configuration files.
 
 =cut
 
+# This should return a hardcoded list that gets machine-generated.  No reason to spend user processing time
+# generating this hash of combinations every time.
 sub _invalid_combinations {
     my @context    = qw( -A -B -C --after-context --before-context --context );
     my @pretty     = qw( --heading --group --break );
     my @filename   = qw( -h -H --with-filename --no-filename );
     my @file_lists = qw( -f -g -l -L );
 
-    return (
+    return _expand_invalids(
         [qw(-l)]                 => [@context, @pretty, @filename, qw(-L -o --passthru --output --max-count --column -f -g --show-types)],
         [qw(-L)]                 => [@context, @pretty, @filename, qw(-l -o --passthru --output --max-count --column -f -g --show-types -c --count -v)],
         [qw(--lines)]            => [@context, @pretty, @filename, qw(-l --files-with-matches --files-without-matches -L -o --passthru --match -m --max-count -1 -c --count --column --print0 -f -g --show-types)],
@@ -51,6 +53,20 @@ sub _invalid_combinations {
         [qw(-g)]                 => [qw(-f), @pretty],
         [qw(-p)]                 => [@context, @file_lists, qw( --passthru --lines -c )],
     );
+}
+
+sub _expand_invalids {
+    my %bad;
+
+    while ( my ($keys,$values) = splice( @_, 0, 2 ) ) {
+        s/^-+// for @{$values};
+        for my $i ( @{$keys} ) {
+            $i =~ s/^-+//;
+            $bad{$i} = $values;
+        }
+    }
+
+    return \%bad;
 }
 
 sub _generate_ignore_dir {

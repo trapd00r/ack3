@@ -22,6 +22,40 @@ my $options_used = options_used();
 say 'After processing, @ARGV is:';
 say for @ARGV;
 
+find_mutex_options( $options_used );
+
+exit 0;
+
+
+sub in {
+    my $needle = shift;
+    my $haystack = shift;
+
+    for my $i ( @{$haystack} ) {
+        return 1 if $i eq $needle;
+    }
+
+    return 0;
+}
+
+sub find_mutex_options {
+    my $used = shift;
+
+    my $invalids = App::Ack::ConfigLoader::_invalid_combinations();
+
+    for my $used_arg ( sort keys %{$used} ) {
+        my $conflicts = $invalids->{$used_arg};
+
+        for my $potential_conflict ( @{$conflicts} ) {
+            if ( $used->{$potential_conflict} ) {
+                # XXX This should say what the user typed, not what the internal preferred abbreviation is.
+                say "$used_arg and $potential_conflict are mutex";
+            }
+        }
+    }
+}
+
+
 # Processes the command line option and returns a hash of the options that were
 # used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
 
