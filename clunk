@@ -13,9 +13,11 @@ use App::Ack::ConfigLoader ();
 Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
 
 
+say 'Before processing, @ARGV is:';
+say for @ARGV;
 
 my $options_used = options_used();
-{use Data::Dumper; local $Data::Dumper::Sortkeys=1; local $Data::Dumper::Trailingcomma=1; warn Dumper( $options_used )}
+{use Data::Dumper; local $Data::Dumper::Sortkeys=1; warn Dumper( $options_used )}
 
 say 'After processing, @ARGV is:';
 say for @ARGV;
@@ -32,14 +34,15 @@ sub options_used {
     # Go through the specs and change them to just set a value in a hash.
     # We don't want it to take action, only to note that the argument appeared.
     my $seen;
-    my $hashifying_spec = {};
-    for my $spec ( sort keys %{$real_spec} ) {
-        $hashifying_spec->{$spec} = sub { ++$seen->{+shift} };
-    }
+    my %hashifying_spec = (
+        map {
+            $_ => sub { ++$seen->{+shift} }
+        } keys %{$real_spec}
+    );
 
     # Process the arguments, which has no effect and reads through our local @ARGV copy.
-    Getopt::Long::GetOptions( %{$hashifying_spec} );
+    # The elements of $seen will be populated during this process.
+    Getopt::Long::GetOptions( %hashifying_spec );
 
     return $seen;
 }
-
