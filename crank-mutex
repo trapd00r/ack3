@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+
+use 5.010;
+use strict;
+use warnings;
+
+use Data::Dumper;
+
+
+sub invalid_combinations {
+    my @context    = qw( -A -B -C --after-context --before-context --context );
+    my @pretty     = qw( --heading --group --break );
+    my @filename   = qw( -h -H --with-filename --no-filename );
+    my @file_lists = qw( -f -g -l -L );
+
+    return (
+        [qw(-l)]                 => [@context, @pretty, @filename, qw(-L -o --passthru --output --max-count --column -f -g --show-types)],
+        [qw(-L)]                 => [@context, @pretty, @filename, qw(-l -o --passthru --output --max-count --column -f -g --show-types -c --count -v)],
+        [qw(--lines)]            => [@context, @pretty, @filename, qw(-l --files-with-matches --files-without-matches -L -o --passthru --match -m --max-count -1 -c --count --column --print0 -f -g --show-types)],
+        [qw(-o)]                 => [@context, qw(--output -c --count --column --column -f --show-types)],
+        [qw(--passthru)]         => [@context, @file_lists, qw(--output --column -m --max-count -1 -c --count -f -g)],
+        [qw(--output)]           => [@context, @file_lists, qw(-c --count)],
+        [qw(--match)]            => [qw(-f -g)],
+        [qw(-m --max-count)]     => [qw(-1 -f -g -c --count)],
+        [qw(-h --no-filename)]   => [@file_lists, qw(-H --with-filename --group --heading)],
+        [qw(-H --with-filename)] => [@file_lists, qw(-h --no-filename)],
+        [qw(-c --count)]         => [@context, @pretty, qw(--column -f -g)],
+        [qw(--column)]           => [@file_lists],
+        [@context]               => [@file_lists],
+        [qw(-f)]                 => [qw(-g), @pretty],
+        [qw(-g)]                 => [qw(-f), @pretty],
+        [qw(-p)]                 => [@context, @file_lists, qw( --passthru --lines -c )],
+    );
+}
+
+my %mutex;
+my @combos = invalid_combinations();
+
+while ( my ($lefts,$rights) = splice( @combos, 0, 2 ) ) {
+    for my $left ( @{$lefts} ) {
+        $left =~ s/^-+//;
+
+        for my $right ( @{$rights} ) {
+            $right =~ s/^-+//;
+            ++$mutex{$left}->{$right};
+        }
+    }
+}
+
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Trailingcomma = 1;
+$Data::Dumper::Sortkeys = 1;
+$Data::Dumper::Quotekeys = 0;
+
+my $out = Dumper( \%mutex );
+$out =~ s/  /    /g;
+
+say $out;
+
+exit 0;
