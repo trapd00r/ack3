@@ -42,7 +42,8 @@ while ( my ($lefts,$rights) = splice( @combos, 0, 2 ) ) {
 
         for my $right ( @{$rights} ) {
             $right =~ s/^-+//;
-            ++$mutex{$left}->{$right};
+            $mutex{$left}->{$right} = 1;
+            $mutex{$right}->{$left} = 1;
         }
     }
 }
