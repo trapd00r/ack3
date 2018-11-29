@@ -9,8 +9,8 @@ use 5.010001;
 use Getopt::Long 2.38 ();
 use App::Ack::ConfigLoader ();
 
-
-Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+use Data::Dumper;
+local $Data::Dumper::Sortkeys = 1;
 
 
 say 'Before processing, @ARGV is:';
