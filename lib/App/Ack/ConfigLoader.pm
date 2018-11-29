@@ -1100,51 +1100,25 @@ sub _remove_default_options_if_needed {
 
 
 sub _check_for_mutually_exclusive_options {
-    my ( $arg_sources ) = @_;
+    my $used = options_used();
 
-    my %mutually_exclusive_with;
-    my @copy = @{$arg_sources};
+    my $invalids = App::Ack::ConfigLoader::mutex_options();
 
-    my @combos = _invalid_combinations();
-    for ( my $i = 0; $i < @combos; $i += 2 ) {
-        my ( $lhs, $rhs ) = @combos[ $i, $i + 1 ];
+    my @used = sort keys %{$used};
 
-        foreach my $l_opt ( @{$lhs} ) {
-            foreach my $r_opt ( @{$rhs} ) {
-                push @{ $mutually_exclusive_with{ $l_opt } }, $r_opt;
-                push @{ $mutually_exclusive_with{ $r_opt } }, $l_opt;
-            }
-        }
-    }
-
-    while ( @copy ) {
-        my %set_opts;
-
-        my $source = shift @copy;
-        my $args = $source->{contents};
-        $args = ref($args) ? [ @{$args} ] : [ Text::ParseWords::shellwords($args) ];
-
-        foreach my $opt ( @{$args} ) {
-            next unless $opt =~ /^[-+]/;
-            last if $opt eq '--';
-
-            if ( $opt =~ /^(.*)=/ ) {
-                $opt = $1;
-            }
-            elsif ( $opt =~ /^(-[^-]).+/ ) {
-                $opt = $1;
-            }
-
-            $set_opts{ $opt } = 1;
-
-            my $mutex_opts = $mutually_exclusive_with{ $opt };
-
-            next unless $mutex_opts;
-
-            foreach my $mutex_opt ( @{$mutex_opts} ) {
-                if ( $set_opts{ $mutex_opt } ) {
-                    App::Ack::die( "Options '$mutex_opt' and '$opt' are mutually exclusive" );
+    for my $i ( @used ) {
+        for my $j ( @used ) {
+            next if $i eq $j;
+            if ( $invalids->{$i}{$j} ) {
+                for ( $i, $j ) {
+                    if ( length($_) == 1 ) {
+                        $_ = "-$_";
+                    }
+                    else {
+                        $_ = "--$_";
+                    }
                 }
+                App::Ack::die( "Options '$i' and '$j' are mutually exclusive" );
             }
         }
     }
@@ -1152,6 +1126,31 @@ sub _check_for_mutually_exclusive_options {
     return;
 }
 
+
+# Processes the command line option and returns a hash of the options that were
+# used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
+
+sub options_used {
+    local @ARGV = @ARGV;
+
+    # We don't care about the hashes passed in to get_arg_spec().
+    my $real_spec = App::Ack::ConfigLoader::get_arg_spec( {}, {} );
+
+    # Go through the specs and change them to just set a value in a hash.
+    # We don't want it to take action, only to note that the argument appeared.
+    my $seen;
+    my %hashifying_spec = (
+        map {
+            $_ => sub { ++$seen->{+shift} }
+        } keys %{$real_spec}
+    );
+
+    # Process the arguments, which has no effect and reads through our local @ARGV copy.
+    # The elements of $seen will be populated during this process.
+    Getopt::Long::GetOptions( %hashifying_spec );
+
+    return $seen;
+}
 
 =head2 process_args( @sources )
 
