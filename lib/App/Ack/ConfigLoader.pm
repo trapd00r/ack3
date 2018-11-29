@@ -1100,7 +1100,6 @@ sub _remove_default_options_if_needed {
 
 
 sub _check_for_mutually_exclusive_options {
-    return;
     my $used = options_used();
 
     my $invalids = App::Ack::ConfigLoader::mutex_options();
@@ -1127,8 +1126,6 @@ sub _check_for_mutually_exclusive_options {
 # used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
 
 sub options_used {
-    local @ARGV = @ARGV;
-
     # We don't care about the hashes passed in to get_arg_spec().
     my $real_spec = App::Ack::ConfigLoader::get_arg_spec( {}, {} );
 
@@ -1146,8 +1143,8 @@ sub options_used {
 
     # Process the arguments, which has no effect and reads through our local @ARGV copy.
     # The elements of $seen will be populated during this process.
-    Getopt::Long::GetOptions( %hashifying_spec );
-    Getopt::Long::GetOptionsFromArray( [@ARGV], %hashifying_spec );
+    my $p = Getopt::Long::Parser->new;
+    $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
 
     return $seen;
 }
