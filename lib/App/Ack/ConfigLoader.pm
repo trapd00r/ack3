@@ -1100,25 +1100,21 @@ sub _remove_default_options_if_needed {
 
 
 sub _check_for_mutually_exclusive_options {
+    return;
     my $used = options_used();
 
     my $invalids = App::Ack::ConfigLoader::mutex_options();
 
-    my @used = sort keys %{$used};
+    my @used = sort { lc $a cmp lc $b } keys %{$used};
 
     for my $i ( @used ) {
         for my $j ( @used ) {
             next if $i eq $j;
             if ( $invalids->{$i}{$j} ) {
-                for ( $i, $j ) {
-                    if ( length($_) == 1 ) {
-                        $_ = "-$_";
-                    }
-                    else {
-                        $_ = "--$_";
-                    }
-                }
-                App::Ack::die( "Options '$i' and '$j' are mutually exclusive" );
+                my @raw_options = raw_options();
+                my $x = $raw_options[ $used->{$i} ];
+                my $y = $raw_options[ $used->{$j} ];
+                App::Ack::die( "Options '$x' and '$y' are mutually exclusive" );
             }
         }
     }
@@ -1139,18 +1135,36 @@ sub options_used {
     # Go through the specs and change them to just set a value in a hash.
     # We don't want it to take action, only to note that the argument appeared.
     my $seen;
+
+    my $pos = 0;
     my %hashifying_spec = (
+        '<>' => sub { $pos++ },
         map {
-            $_ => sub { ++$seen->{+shift} }
+            $_ => sub { $seen->{+shift} = $pos++ }
         } keys %{$real_spec}
     );
 
     # Process the arguments, which has no effect and reads through our local @ARGV copy.
     # The elements of $seen will be populated during this process.
     Getopt::Long::GetOptions( %hashifying_spec );
+    Getopt::Long::GetOptionsFromArray( [@ARGV], %hashifying_spec );
 
     return $seen;
 }
+
+
+sub raw_options {
+    my @args;
+    my %hashifying_spec = (
+        '<>' => sub { my $arg = shift; push @args, "$arg" },
+    );
+
+    Getopt::Long::Configure('pass_through');
+    Getopt::Long::GetOptionsFromArray( \@ARGV, %hashifying_spec );
+
+    return @args;
+}
+
 
 =head2 process_args( @sources )
 
