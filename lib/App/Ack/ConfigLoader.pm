@@ -1093,7 +1093,7 @@ sub options_used {
 
     # Process the arguments, which has no effect and reads through our local @ARGV copy.
     # The elements of $seen will be populated during this process.
-    my $p = Getopt::Long::Parser->new;
+    my $p = Getopt::Long::Parser->new( config => [qw( no_ignore_case )] );
     $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
 
     return $seen;
@@ -1107,7 +1107,10 @@ sub raw_options {
         '<>' => sub { my $arg = shift; push @args, "$arg" },
     );
 
-    my $old_args = Getopt::Long::Configure( 'pass_through' );
+    my $old_args = Getopt::Long::Configure(qw(
+        no_ignore_case
+        pass_through
+    ));
     Getopt::Long::GetOptionsFromArray( [@ARGV], %hashifying_spec );
     Getopt::Long::Configure( $old_args );
 
