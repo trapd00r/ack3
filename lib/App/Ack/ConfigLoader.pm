@@ -769,7 +769,6 @@ sub get_arg_spec {
             }
             $opt->{ifiles}->add($filter);
         },
-        'lines=s'           => sub { shift; my $val = shift; push @{$opt->{lines}}, $val },
         'l|files-with-matches'
                             => \$opt->{l},
         'L|files-without-matches'
