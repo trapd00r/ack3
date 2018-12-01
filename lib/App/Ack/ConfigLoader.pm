@@ -1174,11 +1174,13 @@ sub options_used {
 sub raw_options {
     my @args;
     my %hashifying_spec = (
+        # Stringify arg in case it is an object that must be stringified.
         '<>' => sub { my $arg = shift; push @args, "$arg" },
     );
 
-    Getopt::Long::Configure('pass_through');
-    Getopt::Long::GetOptionsFromArray( \@ARGV, %hashifying_spec );
+    my $old_args = Getopt::Long::Configure( 'pass_through' );
+    Getopt::Long::GetOptionsFromArray( [@ARGV], %hashifying_spec );
+    Getopt::Long::Configure( $old_args );
 
     return @args;
 }
