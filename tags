@@ -322,7 +322,6 @@ is_inverted	lib/App/Ack/Filter.pm	/^sub is_inverted {$/;"	s
 is_inverted	lib/App/Ack/Filter/Inverse.pm	/^sub is_inverted {$/;"	s
 is_nonempty_array	t/Util.pm	/^sub is_nonempty_array {$/;"	s
 is_windows	t/Util.pm	/^sub is_windows {$/;"	s
-iterate	ack	/^sub iterate {$/;"	s
 line_split	t/Util.pm	/^sub line_split {$/;"	s
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 msg	t/Util.pm	/^sub msg {$/;"	s
@@ -358,7 +357,6 @@ populate_filetypes	t/filetypes.t	/^sub populate_filetypes {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
 print	lib/App/Ack.pm	/^sub print            { print {$fh} @_; return; }$/;"	s
 print_blank_line	lib/App/Ack.pm	/^sub print_blank_line { print {$fh} "\\n"; return; }$/;"	s
-print_line_if_context	ack	/^sub print_line_if_context {$/;"	s
 print_line_with_context	ack	/^sub print_line_with_context {$/;"	s
 print_line_with_options	ack	/^sub print_line_with_options {$/;"	s
 print_matches_in_file	ack	/^sub print_matches_in_file {$/;"	s
