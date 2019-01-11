@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-our $VERSION = '2.999_05'; # Check https://beyondgrep.com/ for updates
+our $VERSION = '2.999_06'; # Check https://beyondgrep.com/ for updates
 
 use 5.010001;
 
@@ -25,6 +25,7 @@ use App::Ack::Filter::Match ();
 use App::Ack::Filter::Collection ();
 
 # Global command-line options
+our $opt_1;
 our $opt_after_context;
 our $opt_before_context;
 our $opt_break;
@@ -42,6 +43,7 @@ our $opt_passthru;
 our $opt_p;
 our $opt_regex;
 our $opt_show_filename;
+our $opt_show_types;
 our $opt_underline;
 our $opt_v;
 
@@ -114,6 +116,7 @@ MAIN: {
 
     my $opt = App::Ack::ConfigLoader::process_args( @arg_sources );
 
+    $opt_1              = $opt->{1};
     $opt_after_context  = $opt->{after_context};
     $opt_before_context = $opt->{before_context};
     $opt_break          = $opt->{break};
@@ -131,6 +134,7 @@ MAIN: {
     $opt_passthru       = $opt->{passthru};
     $opt_regex          = $opt->{regex};
     $opt_show_filename  = $opt->{show_filename};
+    $opt_show_types     = $opt->{show_types};
     $opt_underline      = $opt->{underline};
     $opt_v              = $opt->{v};
 
@@ -221,8 +225,6 @@ MAIN: {
     }
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
 
-    my $only_first = $opt->{1};
-
     my $nmatches    = 0;
     my $total_count = 0;
 
@@ -236,7 +238,7 @@ FILES:
 
         # ack -f
         if ( $opt_f ) {
-            if ( $opt->{show_types} ) {
+            if ( $opt_show_types ) {
                 App::Ack::show_types( $file );
             }
             else {
@@ -247,7 +249,7 @@ FILES:
         }
         # ack -g
         elsif ( $opt_g ) {
-            if ( $opt->{show_types} ) {
+            if ( $opt_show_types ) {
                 App::Ack::show_types( $file );
             }
             else {
@@ -284,7 +286,7 @@ FILES:
                 App::Ack::say( $file->name );
                 ++$nmatches;
 
-                last FILES if $only_first;
+                last FILES if $opt_1;
                 last FILES if defined($opt_m) && $nmatches >= $opt_m;
             }
         }
@@ -326,7 +328,7 @@ FILES:
             if ( $needs_line_scan ) {
                 $nmatches += print_matches_in_file( $file );
             }
-            if ( $nmatches && $only_first ) {
+            if ( $opt_1 && $nmatches ) {
                 last FILES;
             }
         }

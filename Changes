@@ -2,6 +2,10 @@ History file for ack 3.  https://beyondgrep.com/
 
 NEXT
 =====================================
+
+
+2.999_06 Thu Jan 10 20:37:23 CST 2019
+=====================================
 [ENHANCEMENTS]
 The --tt option for Template Toolkit is now --ttml.  The short version
 still works.
@@ -9,6 +13,10 @@ still works.
 The standalone version of ack no longer supports the --faq or --cookbook
 options, which never worked right for it anyway.  Instead, --man includes
 the FAQ and Cookbook.
+
+The --man option no longer uses the `perldoc` program for rendering the
+documentation.  This means you'll have to pipe it into your own pager if
+you want scrolling, but it makes it much more portable.
 
 [FIXES]
 ack would stop finding files if there was a file named "0" in the current
