@@ -207,7 +207,6 @@ _explode_sources	lib/App/Ack/ConfigLoader.pm	/^sub _explode_sources {$/;"	s
 _generate_error_handler	lib/App/Ack/Files.pm	/^sub _generate_error_handler {$/;"	s
 _generate_ignore_dir	lib/App/Ack/ConfigLoader.pm	/^sub _generate_ignore_dir {$/;"	s
 _get_good_and_bad	t/ack-w.t	/^sub _get_good_and_bad {$/;"	s
-_invalid_combinations	lib/App/Ack/ConfigLoader.pm	/^sub _invalid_combinations {$/;"	s
 _my_program	lib/App/Ack.pm	/^sub _my_program {$/;"	s
 _option	t/ack-man.t	/^sub _option {$/;"	s
 _options_block	lib/App/Ack/ConfigDefault.pm	/^sub _options_block {$/;"	s
@@ -316,6 +315,7 @@ inspect	lib/App/Ack/Filter/IsGroup.pm	/^sub inspect {$/;"	s
 inspect	lib/App/Ack/Filter/IsPath.pm	/^sub inspect {$/;"	s
 inspect	lib/App/Ack/Filter/IsPathGroup.pm	/^sub inspect {$/;"	s
 inspect	lib/App/Ack/Filter/Match.pm	/^sub inspect {$/;"	s
+invalid_combinations	crank-mutex	/^sub invalid_combinations {$/;"	s
 invert	lib/App/Ack/Filter.pm	/^sub invert {$/;"	s
 invert	lib/App/Ack/Filter/Inverse.pm	/^sub invert {$/;"	s
 is_cygwin	t/Util.pm	/^sub is_cygwin {$/;"	s
@@ -329,6 +329,7 @@ is_windows	t/Util.pm	/^sub is_windows {$/;"	s
 line_split	t/Util.pm	/^sub line_split {$/;"	s
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 msg	t/Util.pm	/^sub msg {$/;"	s
+mutex_options	lib/App/Ack/ConfigLoader.pm	/^sub mutex_options {$/;"	s
 name	lib/App/Ack/File.pm	/^sub name {$/;"	s
 new	lib/App/Ack/ConfigFinder.pm	/^sub new {$/;"	s
 new	lib/App/Ack/File.pm	/^sub new {$/;"	s
@@ -354,6 +355,7 @@ opt_parser	lib/App/Ack/ConfigLoader.pm	/^sub opt_parser {$/;"	s
 option_in_usage	t/ack-help.t	/^sub option_in_usage {$/;"	s
 options	lib/App/Ack/ConfigDefault.pm	/^sub options {$/;"	s
 options_clean	lib/App/Ack/ConfigDefault.pm	/^sub options_clean {$/;"	s
+options_used	lib/App/Ack/ConfigLoader.pm	/^sub options_used {$/;"	s
 output_to_pipe	lib/App/Ack.pm	/^sub output_to_pipe {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 pipe_into_ack_with_stderr	t/Util.pm	/^sub pipe_into_ack_with_stderr {$/;"	s
@@ -365,6 +367,7 @@ print_line_with_context	ack	/^sub print_line_with_context {$/;"	s
 print_line_with_options	ack	/^sub print_line_with_options {$/;"	s
 print_matches_in_file	ack	/^sub print_matches_in_file {$/;"	s
 process_args	lib/App/Ack/ConfigLoader.pm	/^sub process_args {$/;"	s
+raw_options	lib/App/Ack/ConfigLoader.pm	/^sub raw_options {$/;"	s
 read_file	t/Util.pm	/^sub read_file {$/;"	s
 read_rcfile	lib/App/Ack/ConfigLoader.pm	/^sub read_rcfile {$/;"	s
 register_filter	lib/App/Ack/Filter.pm	/^sub register_filter {$/;"	s
