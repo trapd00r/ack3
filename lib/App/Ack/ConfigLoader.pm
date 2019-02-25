@@ -363,7 +363,9 @@ sub _context_value {
 
 
 sub _process_other {
-    my ( $opt, $extra_specs, $arg_sources ) = @_;
+    my $opt         = shift;
+    my $extra_specs = shift;
+    my $arg_sources = shift;
 
     my $argv_source;
     my $is_help_types_active;
@@ -592,8 +594,6 @@ sub process_args {
         pager => $ENV{ACK_PAGER_COLOR} || $ENV{ACK_PAGER},
     );
 
-    _check_for_mutually_exclusive_options($arg_sources);
-
     $arg_sources = _remove_default_options_if_needed($arg_sources);
 
     # Check for --dump early.
@@ -612,6 +612,8 @@ sub process_args {
     }
 
     my $type_specs = _process_filetypes(\%opt, $arg_sources);
+
+    _check_for_mutually_exclusive_options( $type_specs );
 
     _process_other(\%opt, $type_specs, $arg_sources);
     while ( @{$arg_sources} ) {
@@ -730,9 +732,11 @@ sub read_rcfile {
 
 # Verifies no mutually-exclusive options were passed.  If they were, this function will die.
 sub _check_for_mutually_exclusive_options {
+    my $type_specs = shift;
+
     my $mutex = mutex_options();
 
-    my $used = _options_used();
+    my $used = _options_used( $type_specs );
 
     my @used = sort { lc $a cmp lc $b } keys %{$used};
 
@@ -755,8 +759,10 @@ sub _check_for_mutually_exclusive_options {
 # Processes the command line option and returns a hash of the options that were
 # used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
 sub _options_used {
+    my $type_specs = shift;
+
     my %dummy_opt;
-    my $real_spec = _build_getopt_spec( \%dummy_opt, {} );
+    my $real_spec = _build_getopt_spec( \%dummy_opt, $type_specs );
 
     # Go through the specs and change them to just set a value in a hash.
     # We don't want it to take action, only to note that the argument appeared.
