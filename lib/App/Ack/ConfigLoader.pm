@@ -227,7 +227,7 @@ sub _process_filetypes {
 }
 
 
-sub get_arg_spec {
+sub _build_getopt_spec {
     my ( $opt, $extra_specs ) = @_;
 
 =begin Adding-Options
@@ -382,7 +382,7 @@ sub _process_other {
         );
     }
 
-    my $arg_specs = get_arg_spec($opt, $extra_specs);
+    my $arg_specs = _build_getopt_spec( $opt, $extra_specs );
 
     my $p = opt_parser();
     foreach my $source (@{$arg_sources}) {
@@ -445,7 +445,7 @@ sub _explode_sources {
     my @new_sources;
 
     my %opt;
-    my $arg_spec = get_arg_spec(\%opt);
+    my $arg_spec = _build_getopt_spec( \%opt, {} );
 
     my $add_type = sub {
         my ( undef, $arg ) = @_;
@@ -578,71 +578,6 @@ sub _remove_default_options_if_needed {
     my @copy = @{$sources};
     splice @copy, $default_index, 1;
     return \@copy;
-}
-
-
-sub _check_for_mutually_exclusive_options {
-    my $used = options_used();
-
-    my $invalids = App::Ack::ConfigLoader::mutex_options();
-
-    my @used = sort { lc $a cmp lc $b } keys %{$used};
-
-    for my $i ( @used ) {
-        for my $j ( @used ) {
-            next if $i eq $j;
-            if ( $invalids->{$i}{$j} ) {
-                my @raw_options = raw_options();
-                my $x = $raw_options[ $used->{$i} ];
-                my $y = $raw_options[ $used->{$j} ];
-                App::Ack::die( "Options '$x' and '$y' are mutually exclusive" );
-            }
-        }
-    }
-
-    return;
-}
-
-
-# Processes the command line option and returns a hash of the options that were
-# used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
-
-sub options_used {
-    # We don't care about the hashes passed in to get_arg_spec().
-    my $real_spec = App::Ack::ConfigLoader::get_arg_spec( {}, {} );
-
-    # Go through the specs and change them to just set a value in a hash.
-    # We don't want it to take action, only to note that the argument appeared.
-    my $seen;
-
-    my $pos = 0;
-    my %hashifying_spec = (
-        '<>' => sub { $pos++ },
-        map {
-            $_ => sub { $seen->{+shift} = $pos++ }
-        } keys %{$real_spec}
-    );
-
-    # Process the arguments, which has no effect and reads through our local @ARGV copy.
-    # The elements of $seen will be populated during this process.
-    my $p = opt_parser();
-    $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
-
-    return $seen;
-}
-
-
-sub raw_options {
-    my @args;
-    my %hashifying_spec = (
-        # Stringify arg in case it is an object that must be stringified.
-        '<>' => sub { my $arg = shift; push @args, "$arg" },
-    );
-
-    my $p = opt_parser( 'pass_through' );
-    $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
-
-    return @args;
 }
 
 
@@ -790,6 +725,73 @@ sub read_rcfile {
     close $fh or App::Ack::die( "Unable to close $file: $!" );
 
     return @lines;
+}
+
+
+# Verifies no mutually-exclusive options were passed.  If they were, this function will die.
+sub _check_for_mutually_exclusive_options {
+    my $mutex = mutex_options();
+
+    my $used = _options_used();
+
+    my @used = sort { lc $a cmp lc $b } keys %{$used};
+
+    for my $i ( @used ) {
+        for my $j ( @used ) {
+            next if $i eq $j;
+            if ( $mutex->{$i}{$j} ) {
+                my @raw_options = _raw_options();
+                my $x = $raw_options[ $used->{$i} ];
+                my $y = $raw_options[ $used->{$j} ];
+                App::Ack::die( "Options '$x' and '$y' are mutually exclusive" );
+            }
+        }
+    }
+
+    return;
+}
+
+
+# Processes the command line option and returns a hash of the options that were
+# used on the command line, using their full name.  "--prox" shows up in the hash as "--proximate".
+sub _options_used {
+    my %dummy_opt;
+    my $real_spec = _build_getopt_spec( \%dummy_opt, {} );
+
+    # Go through the specs and change them to just set a value in a hash.
+    # We don't want it to take action, only to note that the argument appeared.
+    my $seen;
+
+    my $pos = 0;
+    my %hashifying_spec = (
+        '<>' => sub { $pos++ },
+        map {
+            $_ => sub { $seen->{+shift} = $pos++ }
+        } keys %{$real_spec}
+    );
+
+    # Process the arguments, which has no effect and reads through our local @ARGV copy.
+    # The elements of $seen will be populated during this process.
+    my $p = opt_parser();
+    $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
+
+    return $seen;
+}
+
+
+# Returns an array of arguments that were passed on the command line.
+# This is so the mutex checker can find the original argument.
+sub _raw_options {
+    my @args;
+    my %hashifying_spec = (
+        # Stringify arg in case it is an object that must be stringified.
+        '<>' => sub { my $arg = shift; push @args, "$arg" },
+    );
+
+    my $p = opt_parser( 'pass_through' );
+    $p->getoptionsfromarray( [@ARGV], %hashifying_spec );
+
+    return @args;
 }
 
 

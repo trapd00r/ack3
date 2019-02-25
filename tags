@@ -192,6 +192,7 @@ WITH_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^WITH_SWITCHES_MULTIPLE_FILES: {$/;"	l
 WITH_SWITCHES_MULTIPLE_FILES	t/basic.t	/^WITH_SWITCHES_MULTIPLE_FILES: {$/;"	l
 WITH_SWITCHES_ONE_FILE	t/ack-h.t	/^WITH_SWITCHES_ONE_FILE: {$/;"	l
 WITH_SWITCHES_ONE_FILE	t/basic.t	/^WITH_SWITCHES_ONE_FILE: {$/;"	l
+_build_getopt_spec	lib/App/Ack/ConfigLoader.pm	/^sub _build_getopt_spec {$/;"	s
 _check_command_for_taintedness	t/Util.pm	/^sub _check_command_for_taintedness {$/;"	s
 _check_for_ackrc	lib/App/Ack/ConfigFinder.pm	/^sub _check_for_ackrc {$/;"	s
 _check_for_mutually_exclusive_options	lib/App/Ack/ConfigLoader.pm	/^sub _check_for_mutually_exclusive_options {$/;"	s
@@ -210,12 +211,14 @@ _get_good_and_bad	t/ack-w.t	/^sub _get_good_and_bad {$/;"	s
 _my_program	lib/App/Ack.pm	/^sub _my_program {$/;"	s
 _option	t/ack-man.t	/^sub _option {$/;"	s
 _options_block	lib/App/Ack/ConfigDefault.pm	/^sub _options_block {$/;"	s
+_options_used	lib/App/Ack/ConfigLoader.pm	/^sub _options_used {$/;"	s
 _pic_decode	lib/App/Ack.pm	/^sub _pic_decode {$/;"	s
 _populate_help_options	t/ack-help.t	/^    sub _populate_help_options {$/;"	s
 _populate_man_options	xt/man.t	/^    sub _populate_man_options {$/;"	s
 _process_filetypes	lib/App/Ack/ConfigLoader.pm	/^sub _process_filetypes {$/;"	s
 _process_filter_spec	lib/App/Ack/ConfigLoader.pm	/^sub _process_filter_spec {$/;"	s
 _process_other	lib/App/Ack/ConfigLoader.pm	/^sub _process_other {$/;"	s
+_raw_options	lib/App/Ack/ConfigLoader.pm	/^sub _raw_options {$/;"	s
 _record_option_coverage	t/Util.pm	/^sub _record_option_coverage {$/;"	s
 _remove_default_options_if_needed	lib/App/Ack/ConfigLoader.pm	/^sub _remove_default_options_if_needed {$/;"	s
 _remove_directory_separator	lib/App/Ack/ConfigLoader.pm	/^sub _remove_directory_separator {$/;"	s
@@ -291,7 +294,6 @@ firstliney	lib/App/Ack/File.pm	/^sub firstliney {$/;"	s
 from_argv	lib/App/Ack/Files.pm	/^sub from_argv {$/;"	s
 from_file	lib/App/Ack/Files.pm	/^sub from_file {$/;"	s
 from_stdin	lib/App/Ack/Files.pm	/^sub from_stdin {$/;"	s
-get_arg_spec	lib/App/Ack/ConfigLoader.pm	/^sub get_arg_spec {$/;"	s
 get_expected_options	t/Util.pm	/^sub get_expected_options {$/;"	s
 get_file_id	ack	/^sub get_file_id {$/;"	s
 get_help_options	t/ack-help.t	/^    sub get_help_options {$/;"	s
@@ -355,7 +357,6 @@ opt_parser	lib/App/Ack/ConfigLoader.pm	/^sub opt_parser {$/;"	s
 option_in_usage	t/ack-help.t	/^sub option_in_usage {$/;"	s
 options	lib/App/Ack/ConfigDefault.pm	/^sub options {$/;"	s
 options_clean	lib/App/Ack/ConfigDefault.pm	/^sub options_clean {$/;"	s
-options_used	lib/App/Ack/ConfigLoader.pm	/^sub options_used {$/;"	s
 output_to_pipe	lib/App/Ack.pm	/^sub output_to_pipe {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 pipe_into_ack_with_stderr	t/Util.pm	/^sub pipe_into_ack_with_stderr {$/;"	s
@@ -367,7 +368,6 @@ print_line_with_context	ack	/^sub print_line_with_context {$/;"	s
 print_line_with_options	ack	/^sub print_line_with_options {$/;"	s
 print_matches_in_file	ack	/^sub print_matches_in_file {$/;"	s
 process_args	lib/App/Ack/ConfigLoader.pm	/^sub process_args {$/;"	s
-raw_options	lib/App/Ack/ConfigLoader.pm	/^sub raw_options {$/;"	s
 read_file	t/Util.pm	/^sub read_file {$/;"	s
 read_rcfile	lib/App/Ack/ConfigLoader.pm	/^sub read_rcfile {$/;"	s
 register_filter	lib/App/Ack/Filter.pm	/^sub register_filter {$/;"	s
