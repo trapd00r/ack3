@@ -198,6 +198,7 @@ _check_for_ackrc	lib/App/Ack/ConfigFinder.pm	/^sub _check_for_ackrc {$/;"	s
 _check_for_mutually_exclusive_options	lib/App/Ack/ConfigLoader.pm	/^sub _check_for_mutually_exclusive_options {$/;"	s
 _check_message	t/Util.pm	/^sub _check_message {$/;"	s
 _clean	t/ack-man.t	/^sub _clean {$/;"	s
+_color_cell	lib/App/Ack.pm	/^sub _color_cell {$/;"	s
 _compare_opts	lib/App/Ack/ConfigLoader.pm	/^sub _compare_opts {$/;"	s
 _compile_descend_filter	ack	/^sub _compile_descend_filter {$/;"	s
 _compile_file_filter	ack	/^sub _compile_file_filter {$/;"	s
@@ -224,6 +225,8 @@ _remove_default_options_if_needed	lib/App/Ack/ConfigLoader.pm	/^sub _remove_defa
 _remove_directory_separator	lib/App/Ack/ConfigLoader.pm	/^sub _remove_directory_separator {$/;"	s
 _remove_redundancies	lib/App/Ack/ConfigFinder.pm	/^sub _remove_redundancies {$/;"	s
 _section	t/ack-man.t	/^sub _section {$/;"	s
+_show_color_grid	lib/App/Ack.pm	/^sub _show_color_grid {$/;"	s
+_show_rgb_grid	lib/App/Ack.pm	/^sub _show_rgb_grid {$/;"	s
 _test_home_ackrc	t/forbidden-options.t	/^sub _test_home_ackrc {$/;"	s
 _test_project_ackrc	t/forbidden-options.t	/^sub _test_project_ackrc {$/;"	s
 _uninvert_filter	lib/App/Ack/ConfigLoader.pm	/^sub _uninvert_filter {$/;"	s
@@ -392,6 +395,8 @@ set_up_pager	lib/App/Ack.pm	/^sub set_up_pager {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_docs	lib/App/Ack.pm	/^sub show_docs {$/;"	s
 show_help	lib/App/Ack.pm	/^sub show_help {$/;"	s
+show_help_colors	lib/App/Ack.pm	/^sub show_help_colors {$/;"	s
+show_help_rgb	lib/App/Ack.pm	/^sub show_help_rgb {$/;"	s
 show_help_types	lib/App/Ack.pm	/^sub show_help_types {$/;"	s
 show_types	lib/App/Ack.pm	/^sub show_types {$/;"	s
 slurp	t/file-iterator.t	/^sub slurp {$/;"	s
