@@ -739,6 +739,7 @@ sub get_expected_options {
         '--ignore-file',
         '--invert-match',
         '--literal',
+        '--ls-color',
         '--man',
         '--match',
         '--max-count',

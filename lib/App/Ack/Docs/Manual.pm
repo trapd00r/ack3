@@ -131,6 +131,10 @@ environment variable is used.
 
 Sets the color to be used for filenames.
 
+=item B<--ls-color>
+
+Use LS_COLORS to colorize filenames.
+
 =item B<--color-match=I<color>>
 
 Sets the color to be used for matches.

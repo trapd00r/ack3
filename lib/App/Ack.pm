@@ -314,6 +314,7 @@ File presentation:
                                 column numbers.
   --help-colors                 Show a list of possible color combinations.
   --help-rgb-colors             Show a list of advanced RGB colors.
+  --ls-color                    Colorize filename with LS_COLORS
   --flush                       Flush output immediately, even when ack is used
                                 non-interactively (when output goes to a pipe or
                                 file).

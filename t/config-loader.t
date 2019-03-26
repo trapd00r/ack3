@@ -27,6 +27,7 @@ my %defaults = (
     heading    => undef,
     l          => undef,
     L          => undef,
+    'ls-color' => undef,
     m          => undef,
     n          => undef,
     output     => undef,

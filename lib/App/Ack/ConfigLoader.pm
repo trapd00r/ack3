@@ -290,6 +290,7 @@ sub get_arg_spec {
         'color-filename=s'  => \$ENV{ACK_COLOR_FILENAME},
         'color-colno=s'     => \$ENV{ACK_COLOR_COLNO},
         'color-lineno=s'    => \$ENV{ACK_COLOR_LINENO},
+        'ls-color'          => \$opt->{ls_color},
         'column!'           => \$opt->{column},
         count               => \$opt->{count},
         'create-ackrc'      => sub { say for ( '--ignore-ack-defaults', App::Ack::ConfigDefault::options() ); exit; },

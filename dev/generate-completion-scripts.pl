@@ -46,6 +46,7 @@ my %ZSH_DESCRIPTIONS = (
     '--ignore-file'           => 'ignore files matching FILTERTYPE:FILTERARGS',
     '--invert-match'          => 'select non-matching lines',
     '--literal'               => 'quote all metacharacters in PATTERN',
+    '--ls-color'              => 'colorize filenames with LS_COLORS',
     '--man'                   => 'displays the ack man page',
     '--match'                 => 'specify PATTERN explicitly',
     '--max-count'             => 'stop reading after NUM matches',

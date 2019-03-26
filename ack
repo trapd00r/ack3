@@ -37,6 +37,7 @@ our $opt_g;
 our $opt_heading;
 our $opt_L;
 our $opt_l;
+our $opt_ls_color;
 our $opt_m;
 our $opt_output;
 our $opt_passthru;
@@ -128,6 +129,7 @@ MAIN: {
     $opt_heading        = $opt->{heading};
     $opt_L              = $opt->{L};
     $opt_l              = $opt->{l};
+    $opt_ls_color       = $opt->{ls_color};
     $opt_m              = $opt->{m};
     $opt_output         = $opt->{output};
     $opt_p              = $opt->{p};
@@ -818,7 +820,17 @@ sub print_line_with_options {
         my $colno;
         $colno = get_match_colno() if $opt_column;
         if ( $opt_color ) {
-            $filename = Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} );
+            if( $opt_ls_color ) {
+                if( eval { require File::LsColor; 1 } ) {
+                    $filename = File::LsColor::ls_color( $filename );
+                }
+                else {
+                    warn "File::LsColor not installed, reverting to Term::ANSIColor\n";
+                    $filename = Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} );
+                }
+            }
+            $filename = Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) unless $opt_ls_color;
+
             $lineno   = Term::ANSIColor::colored( $lineno,   $ENV{ACK_COLOR_LINENO} );
             $colno    = Term::ANSIColor::colored( $colno,    $ENV{ACK_COLOR_COLNO} ) if $opt_column;
         }
